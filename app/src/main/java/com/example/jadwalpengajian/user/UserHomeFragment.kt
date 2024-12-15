@@ -1,11 +1,13 @@
 package com.example.jadwalpengajian.user
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.jadwalpengajian.R
 import com.example.jadwalpengajian.ScheduleAdapter
@@ -38,20 +40,34 @@ class UserHomeFragment : Fragment(R.layout.fragment_user_home) {
 
     private fun fetchPengajianData() {
         val retrofit = ApiClient.getInsance().create(ApiService::class.java)
+        Log.d("API_DEBUG", "Mulai fetch data")
+
         retrofit.getAllPengajian().enqueue(object : Callback<List<Pengajian>> {
             override fun onResponse(call: Call<List<Pengajian>>, response: Response<List<Pengajian>>) {
+                Log.d("API_DEBUG", "Response code: ${response.code()}")
+                Log.d("API_DEBUG", "Response body: ${response.body()}")
+
                 if (response.isSuccessful) {
                     val pengajianList = response.body()
                     pengajianList?.let {
+                        Log.d("API_DEBUG", "Data berhasil: ${it.size} item")
                         setupRecyclerView(it)
                     }
                 } else {
-                    Toast.makeText(requireContext(), "Gagal mengambil data", Toast.LENGTH_SHORT).show()
+                    val errorBody = response.errorBody()?.string()
+                    Log.e("API_DEBUG", "Error body: $errorBody")
+                    Toast.makeText(requireContext(),
+                        "Gagal mengambil data. Code: ${response.code()}",
+                        Toast.LENGTH_SHORT).show()
                 }
             }
 
             override fun onFailure(call: Call<List<Pengajian>>, t: Throwable) {
-                Toast.makeText(requireContext(), "Gagal mengambil data", Toast.LENGTH_SHORT).show()
+                Log.e("API_DEBUG", "Network Error: ${t.message}")
+                t.printStackTrace()
+                Toast.makeText(requireContext(),
+                    "Gagal mengambil data: ${t.message}",
+                    Toast.LENGTH_SHORT).show()
             }
         })
     }
@@ -67,13 +83,23 @@ class UserHomeFragment : Fragment(R.layout.fragment_user_home) {
                 removeFromFavorites(favorite)
             })
 
+            // Set listener untuk item klik
+            adapter.setOnItemClickListener { jadwal ->
+                val bundle = Bundle().apply {
+                    putString("judul", jadwal.judul)
+                    putString("pembicara", jadwal.pembicara)
+                    putString("tanggal", jadwal.tanggal)
+                    putString("waktu", jadwal.waktu)
+                    putString("deskripsi", jadwal.deskripsi)
+                }
+                findNavController().navigate(R.id.action_userHomeFragment_to_userDetailFragment, bundle)
+            }
+
             // Update ikon favorit berdasarkan status favorit
             scheduleList.forEach { jadwal ->
                 if (favorites.contains(jadwal.judul)) {
-                    // Jika jadwal ada di daftar favorit, set ikon favorit terisi
                     adapter.updateFavoriteStatus(jadwal, true)
                 } else {
-                    // Jika tidak, set ikon favorit tidak terisi
                     adapter.updateFavoriteStatus(jadwal, false)
                 }
             }
@@ -82,6 +108,9 @@ class UserHomeFragment : Fragment(R.layout.fragment_user_home) {
             binding.rvPengajian.layoutManager = LinearLayoutManager(requireContext())
         }
     }
+
+
+
 
     private fun addToFavorites(jadwal: Pengajian, favoriteIcon: ImageView) {
         val favorite = Favorite(

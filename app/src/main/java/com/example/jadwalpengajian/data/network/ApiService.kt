@@ -2,6 +2,7 @@ package com.example.jadwalpengajian.data.network
 
 
 import com.example.jadwalpengajian.data.Pengajian
+import com.example.jadwalpengajian.data.RequestPengajian
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.DELETE
@@ -16,7 +17,7 @@ interface ApiService {
     @GET("pengajian/{id}")
     fun getPengajianById(@Path("id") id: String): Call<Pengajian>
     @POST("pengajian")
-    fun createPengajian(@Body pengajian: Pengajian): Call<Void>
+    fun createPengajian(@Body pengajian: RequestPengajian): Call<Void>
     @POST("pengajian/{id}")
     fun updatePengajian(
         @Path("id") id: String,

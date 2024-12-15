@@ -15,6 +15,7 @@ class ScheduleAdapter(
 ) : RecyclerView.Adapter<ScheduleAdapter.ScheduleViewHolder>() {
 
     private val favoriteStatusMap = mutableMapOf<String, Boolean>()
+    private var itemClickListener: ((Pengajian) -> Unit)? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ScheduleViewHolder {
         val binding = ItemScheduleBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -24,6 +25,11 @@ class ScheduleAdapter(
     override fun onBindViewHolder(holder: ScheduleViewHolder, position: Int) {
         val scheduleItem = scheduleList[position]
         holder.bind(scheduleItem, onFavoriteClick, favoriteStatusMap[scheduleItem.judul] ?: false)
+
+        // Set listener untuk item klik
+        holder.itemView.setOnClickListener {
+            itemClickListener?.invoke(scheduleItem)
+        }
     }
 
     override fun getItemCount(): Int {
@@ -33,6 +39,10 @@ class ScheduleAdapter(
     fun updateFavoriteStatus(jadwal: Pengajian, isFavorite: Boolean) {
         favoriteStatusMap[jadwal.judul] = isFavorite
         notifyDataSetChanged() // Memperbarui tampilan
+    }
+
+    fun setOnItemClickListener(listener: (Pengajian) -> Unit) {
+        itemClickListener = listener
     }
 
     class ScheduleViewHolder(private val binding: ItemScheduleBinding) :
@@ -51,4 +61,5 @@ class ScheduleAdapter(
         }
     }
 }
+
 

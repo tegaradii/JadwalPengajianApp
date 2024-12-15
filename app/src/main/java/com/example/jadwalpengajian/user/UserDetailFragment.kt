@@ -12,44 +12,32 @@ class UserDetailFragment : Fragment(R.layout.fragment_user_detail) {
 
     private lateinit var binding: FragmentUserDetailBinding
 
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        binding = FragmentUserDetailBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Menghubungkan binding
-        binding = FragmentUserDetailBinding.bind(view)
+        // Ambil data dari argumen
+        val judul = arguments?.getString("judul")
+        val pembicara = arguments?.getString("pembicara")
+        val tanggal = arguments?.getString("tanggal")
+        val waktu = arguments?.getString("waktu")
+        val deskripsi = arguments?.getString("deskripsi")
 
-        // Mendapatkan data dari arguments (jika ada)
-        val eventTitle = arguments?.getString("eventTitle") ?: "Penguatan Iman di Era Digital"
-        val speaker = arguments?.getString("speaker") ?: "Ust. H. Ahmad Syaifullah, M.A."
-        val date = arguments?.getString("date") ?: "20 Desember 2024"
-        val time = arguments?.getString("time") ?: "19.00 - 21.00 WIB"
-        val description = arguments?.getString("description") ?: "Deskripsi tidak tersedia."
-
-        // Mengisi data dinamis ke tampilan
-        binding.tvHeader.text = "DETAIL PENGAJIAN\nMASJID AL-FALAH"
-        binding.tvJudul.text = eventTitle
-        binding.tvPembicara.text = speaker
-        binding.tvTanggal.text = date
-        binding.tvWaktu.text = time
-        binding.tvDeskripsi.text = description
-
-        // Menampilkan gambar banner (ganti dengan gambar dinamis jika diperlukan)
-        binding.imgBanner.setImageResource(R.drawable.banner_pengajian) // Ubah jika gambar dinamis
+        displayDetails(judul, pembicara, tanggal, waktu, deskripsi)
     }
 
-    companion object {
-        // Fungsi untuk membuat instance fragment dengan data dinamis
-        fun newInstance(eventTitle: String, speaker: String, date: String, time: String, description: String): UserDetailFragment {
-            val fragment = UserDetailFragment()
-            val bundle = Bundle().apply {
-                putString("eventTitle", eventTitle)
-                putString("speaker", speaker)
-                putString("date", date)
-                putString("time", time)
-                putString("description", description)
-            }
-            fragment.arguments = bundle
-            return fragment
-        }
+    private fun displayDetails(judul: String?, pembicara: String?, tanggal: String?, waktu: String?, deskripsi: String?) {
+        binding.tvJudul.text = judul
+        binding.tvPembicara.text = pembicara
+        binding.tvTanggal.text = tanggal
+        binding.tvWaktu.text = waktu
+        binding.tvDeskripsi.text = deskripsi
     }
 }
