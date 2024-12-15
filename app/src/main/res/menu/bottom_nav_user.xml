@@ -1,0 +1,21 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/userHomeFragment"
+        android:title="Home"
+        app:showAsAction="ifRoom"
+        android:icon="@drawable/baseline_home_24" />
+
+    <item
+        android:id="@+id/userBookmarkFragment"
+        android:title="Save"
+        app:showAsAction="ifRoom"
+        android:icon="@drawable/baseline_bookmark_24" />
+
+    <item
+        android:id="@+id/userProfileFragment"
+        android:title="Profile"
+        app:showAsAction="ifRoom"
+        android:icon="@drawable/baseline_person_24"/>
+</menu>

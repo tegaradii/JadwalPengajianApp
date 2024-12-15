@@ -1,0 +1,121 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <!-- Header -->
+    <TextView
+        android:id="@+id/tvHeader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="DETAIL PENGAJIAN\nMASJID AL-FALAH"
+        android:textAlignment="center"
+        android:layout_gravity="center"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:layout_marginTop="16dp" />
+
+    <!-- Divider -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/black"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp" />
+
+    <!-- Banner Pengajian -->
+    <ImageView
+        android:id="@+id/imgBanner"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/banner_pengajian"
+        android:layout_marginBottom="16dp" />
+
+    <!-- Judul Pengajian -->
+    <TextView
+        android:id="@+id/labelJudul"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Judul Pengajian:"
+        android:textStyle="bold"
+        android:layout_marginBottom="4dp" />
+
+    <TextView
+        android:id="@+id/tvJudul"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Penguatan Iman di Era Digital"
+        android:textSize="16sp"
+        android:layout_marginBottom="8dp" />
+
+    <!-- Pembicara -->
+    <TextView
+        android:id="@+id/labelPembicara"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Pembicara:"
+        android:textStyle="bold"
+        android:layout_marginBottom="4dp" />
+
+    <TextView
+        android:id="@+id/tvPembicara"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Ust. H. Ahmad Syaifullah, M.A."
+        android:textSize="16sp"
+        android:layout_marginBottom="8dp" />
+
+    <!-- Tanggal Pengajian -->
+    <TextView
+        android:id="@+id/labelTanggal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Tanggal:"
+        android:textStyle="bold"
+        android:layout_marginBottom="4dp" />
+
+    <TextView
+        android:id="@+id/tvTanggal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="20 Desember 2024"
+        android:textSize="14sp"
+        android:layout_marginBottom="8dp" />
+
+    <!-- Waktu Pengajian -->
+    <TextView
+        android:id="@+id/labelWaktu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Waktu:"
+        android:textStyle="bold"
+        android:layout_marginBottom="4dp" />
+
+    <TextView
+        android:id="@+id/tvWaktu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="19.00 - 21.00 WIB"
+        android:textSize="14sp"
+        android:layout_marginBottom="8dp" />
+
+    <!-- Deskripsi Pengajian -->
+    <TextView
+        android:id="@+id/labelDeskripsi"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Deskripsi:"
+        android:textStyle="bold"
+        android:layout_marginBottom="4dp" />
+
+    <TextView
+        android:id="@+id/tvDeskripsi"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Kajian ini akan membahas bagaimana kita dapat memperkuat iman di era modern dengan berbagai tantangan digital yang ada. Diharapkan jamaah dapat meningkatkan kualitas spiritualnya melalui kajian ini."
+        android:textSize="14sp"
+        android:lineSpacingExtra="4dp" />
+</LinearLayout>

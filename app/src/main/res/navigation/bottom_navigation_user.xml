@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/bottom_navigation"
+    app:startDestination="@id/userHomeFragment">
+
+    <fragment
+        android:id="@+id/userHomeFragment"
+        android:name="com.example.jadwalpengajian.user.UserHomeFragment"
+        android:label="UserHomeFragment" />
+    <fragment
+        android:id="@+id/userBookmarkFragment"
+        android:name="com.example.jadwalpengajian.user.UserBookmarkFragment"
+        android:label="UserBookmarkFragment" />
+    <fragment
+        android:id="@+id/userProfileFragment"
+        android:name="com.example.jadwalpengajian.user.UserProfileFragment"
+        android:label="UserProfileFragment" />
+</navigation>

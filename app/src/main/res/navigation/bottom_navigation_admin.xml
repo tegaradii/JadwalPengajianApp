@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/bottom_navigation_admin"
+    app:startDestination="@id/adminHomeFragment">
+
+    <fragment
+        android:id="@+id/adminHomeFragment"
+        android:name="com.example.jadwalpengajian.admin.AdminHomeFragment"
+        android:label="AdminHomeFragment" >
+        <action
+            android:id="@+id/action_adminHomeFragment_to_adminCreateFragment"
+            app:destination="@id/adminCreateFragment" />
+        <action
+            android:id="@+id/action_adminHomeFragment_to_adminEditFragment"
+            app:destination="@id/adminEditFragment" />
+        <action
+            android:id="@+id/action_adminHomeFragment_to_adminDetailFragment"
+            app:destination="@id/adminDetailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/adminProfileFragment"
+        android:name="com.example.jadwalpengajian.admin.AdminProfileFragment"
+        android:label="AdminProfileFragment" />
+    <fragment
+        android:id="@+id/adminCreateFragment"
+        android:name="com.example.jadwalpengajian.admin.AdminCreateFragment"
+        android:label="AdminCreateFragment" />
+    <fragment
+        android:id="@+id/adminEditFragment"
+        android:name="com.example.jadwalpengajian.admin.AdminEditFragment"
+        android:label="AdminEditFragment" />
+    <fragment
+        android:id="@+id/adminDetailFragment"
+        android:name="com.example.jadwalpengajian.admin.AdminDetailFragment"
+        android:label="AdminDetailFragment" />
+
+</navigation>
