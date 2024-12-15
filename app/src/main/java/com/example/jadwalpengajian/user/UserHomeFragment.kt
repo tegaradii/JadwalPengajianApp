@@ -57,15 +57,30 @@ class UserHomeFragment : Fragment(R.layout.fragment_user_home) {
     }
 
     private fun setupRecyclerView(scheduleList: List<Pengajian>) {
-        val adapter = ScheduleAdapter(scheduleList, { jadwal, favoriteIcon ->
-            // Logika untuk menambahkan ke favorit
-            addToFavorites(jadwal, favoriteIcon)
-        }, { favorite ->
-            // Logika untuk menghapus favorit (jika diperlukan)
-        })
+        lifecycleScope.launch {
+            // Ambil daftar favorit dari database
+            val favorites = database.favoriteDao().getAllFavorites().map { it.judul }
 
-        binding.rvPengajian.adapter = adapter
-        binding.rvPengajian.layoutManager = LinearLayoutManager(requireContext())
+            val adapter = ScheduleAdapter(scheduleList, { jadwal, favoriteIcon ->
+                addToFavorites(jadwal, favoriteIcon)
+            }, { favorite ->
+                removeFromFavorites(favorite)
+            })
+
+            // Update ikon favorit berdasarkan status favorit
+            scheduleList.forEach { jadwal ->
+                if (favorites.contains(jadwal.judul)) {
+                    // Jika jadwal ada di daftar favorit, set ikon favorit terisi
+                    adapter.updateFavoriteStatus(jadwal, true)
+                } else {
+                    // Jika tidak, set ikon favorit tidak terisi
+                    adapter.updateFavoriteStatus(jadwal, false)
+                }
+            }
+
+            binding.rvPengajian.adapter = adapter
+            binding.rvPengajian.layoutManager = LinearLayoutManager(requireContext())
+        }
     }
 
     private fun addToFavorites(jadwal: Pengajian, favoriteIcon: ImageView) {
@@ -91,6 +106,13 @@ class UserHomeFragment : Fragment(R.layout.fragment_user_home) {
                 favoriteIcon.setImageResource(R.drawable.baseline_favorite_24) // Ikon favorit
                 Toast.makeText(requireContext(), "${jadwal.judul} ditambahkan ke favorit", Toast.LENGTH_SHORT).show()
             }
+        }
+    }
+
+    private fun removeFromFavorites(favorite: Favorite) {
+        lifecycleScope.launch {
+            database.favoriteDao().delete(favorite) // Hapus dari database
+            Toast.makeText(requireContext(), "${favorite.judul} dihapus dari favorit", Toast.LENGTH_SHORT).show()
         }
     }
 }

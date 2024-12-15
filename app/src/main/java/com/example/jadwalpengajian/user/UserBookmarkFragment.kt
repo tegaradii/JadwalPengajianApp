@@ -2,6 +2,7 @@ package com.example.jadwalpengajian.user
 
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -17,6 +18,7 @@ class UserBookmarkFragment : Fragment(R.layout.fragment_user_bookmark) {
 
     private lateinit var binding: FragmentUserBookmarkBinding
     private lateinit var database: AppDatabase
+    private lateinit var adapter: ScheduleAdapter
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -26,6 +28,10 @@ class UserBookmarkFragment : Fragment(R.layout.fragment_user_bookmark) {
         database = AppDatabase.getDatabase(requireContext())
 
         // Ambil data favorit dari database
+        loadFavorites()
+    }
+
+    private fun loadFavorites() {
         lifecycleScope.launch {
             val favorites = database.favoriteDao().getAllFavorites()
             setupRecyclerView(favorites)
@@ -33,10 +39,9 @@ class UserBookmarkFragment : Fragment(R.layout.fragment_user_bookmark) {
     }
 
     private fun setupRecyclerView(favorites: List<Favorite>) {
-        // Mengonversi daftar favorit menjadi daftar pengajian
         val pengajianList = favorites.map {
             Pengajian(
-                _id = null, // Jika Anda tidak memiliki ID dari Favorite, Anda bisa mengatur ini ke null
+                _id = null,
                 judul = it.judul,
                 pembicara = it.pembicara,
                 tanggal = it.tanggal,
@@ -45,8 +50,7 @@ class UserBookmarkFragment : Fragment(R.layout.fragment_user_bookmark) {
             )
         }
 
-        val adapter = ScheduleAdapter(pengajianList, { jadwal, favoriteIcon ->
-            // Logika untuk menghapus favorit
+        adapter = ScheduleAdapter(pengajianList, { jadwal, favoriteIcon ->
             removeFromFavorites(jadwal)
         }, { favorite ->
             // Tidak ada logika untuk menambahkan favorit di sini
@@ -57,13 +61,20 @@ class UserBookmarkFragment : Fragment(R.layout.fragment_user_bookmark) {
     }
 
     private fun removeFromFavorites(jadwal: Pengajian) {
-        val favoriteToRemove = Favorite(0, jadwal.judul, jadwal.pembicara, jadwal.tanggal, jadwal.waktu, jadwal.deskripsi)
-
         lifecycleScope.launch {
-            database.favoriteDao().delete(favoriteToRemove) // Hapus dari database
-            // Refresh daftar favorit setelah penghapusan
-            val updatedFavorites = database.favoriteDao().getAllFavorites()
-            setupRecyclerView(updatedFavorites) // Memperbarui RecyclerView
+            // Ambil ID dari favorit yang ingin dihapus
+            val favoriteToRemove = database.favoriteDao().getAllFavorites().find { it.judul == jadwal.judul }
+            favoriteToRemove?.let {
+                database.favoriteDao().delete(it) // Hapus dari database
+                Toast.makeText(requireContext(), "${jadwal.judul} dihapus dari favorit", Toast.LENGTH_SHORT).show()
+                loadFavorites() // Memperbarui daftar favorit setelah penghapusan
+            } ?: run {
+                Toast.makeText(requireContext(), "Favorit tidak ditemukan", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 }
+
+
+
+

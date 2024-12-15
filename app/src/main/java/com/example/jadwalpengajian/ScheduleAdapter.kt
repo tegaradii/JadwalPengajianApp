@@ -9,47 +9,46 @@ import com.example.jadwalpengajian.data.Pengajian
 import com.example.jadwalpengajian.databinding.ItemScheduleBinding
 
 class ScheduleAdapter(
-    private val scheduleList: List<Pengajian>, // List data Pengajian
-    private val onFavoriteClick: (Pengajian, ImageView) -> Unit, // Callback untuk event klik favorit
-    private val onRemoveFavoriteClick: (Favorite) -> Unit // Callback untuk event hapus favorit
+    private val scheduleList: List<Pengajian>,
+    private val onFavoriteClick: (Pengajian, ImageView) -> Unit,
+    private val onRemoveFavoriteClick: (Favorite) -> Unit
 ) : RecyclerView.Adapter<ScheduleAdapter.ScheduleViewHolder>() {
 
-    // Membuat ViewHolder untuk item RecyclerView
+    private val favoriteStatusMap = mutableMapOf<String, Boolean>()
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ScheduleViewHolder {
         val binding = ItemScheduleBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ScheduleViewHolder(binding)
     }
 
-    // Menghubungkan data ke ViewHolder
     override fun onBindViewHolder(holder: ScheduleViewHolder, position: Int) {
         val scheduleItem = scheduleList[position]
-        holder.bind(scheduleItem, onFavoriteClick, onRemoveFavoriteClick)
+        holder.bind(scheduleItem, onFavoriteClick, favoriteStatusMap[scheduleItem.judul] ?: false)
     }
 
-    // Menentukan jumlah item di RecyclerView
     override fun getItemCount(): Int {
         return scheduleList.size
     }
 
-    // ViewHolder untuk item RecyclerView
+    fun updateFavoriteStatus(jadwal: Pengajian, isFavorite: Boolean) {
+        favoriteStatusMap[jadwal.judul] = isFavorite
+        notifyDataSetChanged() // Memperbarui tampilan
+    }
+
     class ScheduleViewHolder(private val binding: ItemScheduleBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        // Menghubungkan data ke item tampilan
-        fun bind(jadwalPengajian: Pengajian, onFavoriteClick: (Pengajian, ImageView) -> Unit, onRemoveFavoriteClick: (Favorite) -> Unit) {
-            // Set data ke TextView
+        fun bind(jadwalPengajian: Pengajian, onFavoriteClick: (Pengajian, ImageView) -> Unit, isFavorite: Boolean) {
             binding.tvTitle.text = jadwalPengajian.judul
             binding.tvSpeaker.text = jadwalPengajian.pembicara
             binding.tvDate.text = jadwalPengajian.tanggal
 
             // Set ikon favorit sesuai status
-            // Misalnya, jika Anda memiliki daftar favorit, Anda bisa memeriksa di sini
-            // Untuk contoh ini, kita anggap semua jadwal pengajian adalah favorit
-            // Anda perlu menyesuaikan logika ini sesuai dengan data yang Anda miliki
-            binding.ivFavorite.setImageResource(R.drawable.baseline_favorite_24) // Ikon terisi
+            binding.ivFavorite.setImageResource(if (isFavorite) R.drawable.baseline_favorite_24 else R.drawable.baseline_favorite_border_24)
             binding.ivFavorite.setOnClickListener {
                 onFavoriteClick(jadwalPengajian, binding.ivFavorite)
             }
         }
     }
 }
+
